@@ -155,31 +155,3 @@ export const paginas: { nome: string; descricao: string; link: string }[] = [
   },
 ];
 
-// Trabalhos que não são código, mas resolvem problema de negócio
-export const casosOperacao: { titulo: string; texto: string }[] = [
-  {
-    titulo: "Sistema de operação de lançamento",
-    texto:
-      "Planilha com 143 ações, 553 fórmulas, painel de indicadores e aba de acompanhamento ao vivo para coordenar uma semana de lançamento com toda a equipe.",
-  },
-  {
-    titulo: "Diagnóstico de vendas e rastreamento",
-    texto:
-      "Análise da base de vendas que mostrou que só cerca de 6% dos registros tinham origem identificada, o que levou a corrigir o rastreamento antes de investir em público.",
-  },
-  {
-    titulo: "Agente de vendas no WhatsApp",
-    texto:
-      "Roteiro e regras de um atendente com IA para um evento, respeitando a janela de 24 horas da Meta, a LGPD e com passagem para atendimento humano.",
-  },
-  {
-    titulo: "Publicação automática no Instagram",
-    texto:
-      "Fluxo em seis etapas que pesquisa tendência, escreve o roteiro, gera as imagens, monta o carrossel e publica, usando a API da Anthropic.",
-  },
-  {
-    titulo: "Segmentação de público para vendas",
-    texto:
-      "Cruzamento de participantes de evento com bases de compra para separar quem já comprou, quem é aluno e quem não comprou nada, e dividir as listas entre a equipe.",
-  },
-];

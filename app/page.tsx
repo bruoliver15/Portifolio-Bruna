@@ -1,64 +1,21 @@
+import { Checklist } from "@/components/Checklist";
 import { FluxoHero } from "@/components/FluxoHero";
 import { ProjetoDestaque, ProjetoLinha } from "@/components/Projeto";
 import { perfil } from "@/content/perfil";
-import { casosOperacao, paginas, projetoDestaque, projetos } from "@/content/projetos";
+import { paginas, projetoDestaque, projetos } from "@/content/projetos";
+import { antesDepois, passos, perguntas } from "@/content/venda";
+import { linkContato } from "@/lib/contato";
 
-const servicos = [
-  {
-    titulo: "Automações",
-    texto:
-      "Tarefas repetidas que a equipe faz à mão viram fluxos que rodam sozinhos: mensagens, planilhas, cadastros e avisos.",
-    ferramentas: "Make, ManyChat, Google Apps Script",
-  },
-  {
-    titulo: "Integrações",
-    texto:
-      "Pagamento, CRM, planilha, anúncios e WhatsApp conversando entre si, sem copiar e colar dados de um lugar para outro.",
-    ferramentas: "Asaas, Hubla, ActiveCampaign, Meta Pixel, webhooks",
-  },
-  {
-    titulo: "Sistemas sob medida",
-    texto:
-      "Quando nenhuma ferramenta pronta resolve: painéis, áreas de cliente e sistemas com login, planos e cobrança.",
-    ferramentas: "React, Next.js, Supabase, Node.js",
-  },
-  {
-    titulo: "Sites e páginas de venda",
-    texto:
-      "Sites para empresas locais e páginas de captura que já saem integradas ao CRM e com rastreamento de anúncio.",
-    ferramentas: "HTML, CSS, JavaScript, Next.js, Vercel",
-  },
-];
-
-
-function linkWhatsapp() {
-  if (!perfil.whatsapp) return "";
-  return `https://wa.me/${perfil.whatsapp}?text=${encodeURIComponent(perfil.whatsappMensagem)}`;
-}
-
-function Contatos({ principal = false }: { principal?: boolean }) {
-  const whats = linkWhatsapp();
-  const itens = [
-    whats && { href: whats, texto: "Conversar no WhatsApp" },
-    perfil.fiverr && { href: perfil.fiverr, texto: "Contratar pelo Fiverr" },
-    perfil.email && { href: `mailto:${perfil.email}`, texto: "Enviar e-mail" },
-    perfil.linkedin && { href: perfil.linkedin, texto: "LinkedIn" },
-  ].filter(Boolean) as { href: string; texto: string }[];
-
+function BotaoContato({ grande = false }: { grande?: boolean }) {
   return (
-    <div className="contatos">
-      {itens.map((c, i) => (
-        <a
-          key={c.href}
-          href={c.href}
-          target={c.href.startsWith("mailto:") ? undefined : "_blank"}
-          rel="noopener noreferrer"
-          className={i === 0 && principal ? "botao botao-principal" : "botao"}
-        >
-          {c.texto}
-        </a>
-      ))}
-    </div>
+    <a
+      href={linkContato()}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={grande ? "botao botao-principal botao-grande" : "botao botao-principal"}
+    >
+      Quero automatizar minha empresa
+    </a>
   );
 }
 
@@ -73,32 +30,93 @@ export default function Home() {
         <div className="largura topo-linha">
           <span className="marca">{perfil.nome}</span>
           <nav aria-label="Seções">
+            <a href="#checklist">Diagnóstico</a>
             <a href="#projetos">Projetos</a>
-            <a href="#servicos">O que eu faço</a>
-            <a href="#contato">Contato</a>
+            <a href="#perguntas">Dúvidas</a>
+            <a href={linkContato()} target="_blank" rel="noopener noreferrer" className="topo-cta">
+              Fale comigo
+            </a>
           </nav>
         </div>
       </header>
 
       <main id="conteudo">
-        <section className="hero largura">
-          <div className="hero-texto">
-            <h1>Conecto as ferramentas da sua empresa e construo os sistemas que faltam.</h1>
-            <p className="hero-sub">
-              Sou {perfil.nome.split(" ")[0]}, de {perfil.cidade}. Trabalho na ponte entre marketing
-              e tecnologia: automações, integrações de pagamento e CRM, sistemas web e páginas que
-              já nascem conectadas. Tudo que está aqui foi construído e está em uso.
-            </p>
-            <Contatos principal />
+        {/* Topo: fala com a dor do dono da empresa */}
+        <section className="hero">
+          <div className="largura hero-grade">
+            <div className="hero-texto">
+              <h1>
+                Sua empresa não precisa de mais um funcionário. Precisa parar de fazer tudo à mão.
+              </h1>
+              <p className="hero-sub">
+                Eu automatizo as tarefas repetidas do seu negócio: atendimento no WhatsApp,
+                cadastro de clientes, cobranças, planilhas e relatórios. Sua equipe para de copiar e
+                colar e volta a cuidar do que traz dinheiro.
+              </p>
+              <div className="hero-acoes">
+                <BotaoContato grande />
+                <a href="#checklist" className="link-claro">
+                  Descobrir o que dá para automatizar
+                </a>
+              </div>
+            </div>
+            <FluxoHero />
           </div>
-          <FluxoHero />
         </section>
 
+        {/* Checklist interativo */}
+        <section id="checklist" className="secao secao-lilas" aria-labelledby="h-checklist">
+          <div className="largura">
+            <h2 id="h-checklist">Quanto da sua rotina dá para automatizar?</h2>
+            <p className="secao-intro">Marque o que acontece na sua empresa hoje. Leva 30 segundos.</p>
+            <Checklist />
+          </div>
+        </section>
+
+        {/* Antes e depois */}
+        <section className="secao largura" aria-labelledby="h-antes">
+          <h2 id="h-antes">Como fica a sua rotina depois</h2>
+          <p className="secao-intro">Exemplos reais de processos que eu já transformei.</p>
+          <div className="comparacoes">
+            {antesDepois.map((c) => (
+              <article key={c.area} className="comparacao">
+                <h3>{c.area}</h3>
+                <div className="lado lado-antes">
+                  <span className="lado-rotulo">Hoje</span>
+                  <p>{c.antes}</p>
+                </div>
+                <div className="lado lado-depois">
+                  <span className="lado-rotulo">Com automação</span>
+                  <p>{c.depois}</p>
+                </div>
+                <p className="prova">{c.prova}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Como funciona */}
+        <section className="secao secao-indigo" aria-labelledby="h-passos">
+          <div className="largura">
+            <h2 id="h-passos">Como a gente trabalha junto</h2>
+            <ol className="passos">
+              {passos.map((p) => (
+                <li key={p.titulo}>
+                  <h3>{p.titulo}</h3>
+                  <p>{p.texto}</p>
+                </li>
+              ))}
+            </ol>
+            <BotaoContato />
+          </div>
+        </section>
+
+        {/* Prova: projetos */}
         <section id="projetos" className="secao largura" aria-labelledby="h-projetos">
-          <h2 id="h-projetos">Projetos</h2>
+          <h2 id="h-projetos">Sistemas que eu já entreguei</h2>
           <p className="secao-intro">
-            Sistemas que eu desenvolvi. Os que guardam dados de clientes ficam privados; posso
-            mostrar funcionando numa conversa.
+            Tudo aqui está construído e em uso. Os sistemas que guardam dados de clientes ficam
+            privados, e eu mostro funcionando numa conversa.
           </p>
 
           <ProjetoDestaque p={projetoDestaque} />
@@ -126,45 +144,37 @@ export default function Home() {
           )}
         </section>
 
-        <section className="secao largura" aria-labelledby="h-operacao">
-          <h2 id="h-operacao">Operação e dados</h2>
-          <p className="secao-intro">
-            Nem todo problema pede um sistema. Estes são trabalhos de operação, análise e
-            automação feitos para uma empresa de educação em viagens.
-          </p>
-          <ul className="casos">
-            {casosOperacao.map((c) => (
-              <li key={c.titulo}>
-                <h3>{c.titulo}</h3>
-                <p>{c.texto}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id="servicos" className="secao secao-escura" aria-labelledby="h-servicos">
-          <div className="largura">
-            <h2 id="h-servicos">O que eu faço para a sua empresa</h2>
-            <ul className="servicos">
-              {servicos.map((s) => (
-                <li key={s.titulo}>
-                  <h3>{s.titulo}</h3>
-                  <p>{s.texto}</p>
-                  <p className="servico-ferramentas">{s.ferramentas}</p>
-                </li>
+        {/* Dúvidas */}
+        <section id="perguntas" className="secao secao-lilas" aria-labelledby="h-perguntas">
+          <div className="largura perguntas-grade">
+            <div>
+              <h2 id="h-perguntas">Dúvidas de quem está pensando em automatizar</h2>
+              <p className="secao-intro">Não achou a sua? Pergunte direto, eu respondo.</p>
+            </div>
+            <div className="perguntas">
+              {perguntas.map((q) => (
+                <details key={q.p}>
+                  <summary>{q.p}</summary>
+                  <p>{q.r}</p>
+                </details>
               ))}
-            </ul>
+            </div>
           </div>
         </section>
 
-
-        <section id="contato" className="secao largura contato" aria-labelledby="h-contato">
-          <h2 id="h-contato">Tem um processo que dá trabalho demais?</h2>
-          <p>
-            Me conte o que a sua equipe faz à mão hoje. Eu digo o que dá para automatizar, quanto
-            tempo leva e o que é melhor não automatizar.
-          </p>
-          <Contatos principal />
+        {/* Chamada final */}
+        <section className="final" aria-labelledby="h-final">
+          <div className="largura">
+            <h2 id="h-final">Qual tarefa está roubando o tempo da sua equipe?</h2>
+            <p>
+              Me conte em uma mensagem. Eu respondo dizendo se dá para automatizar, quanto tempo leva
+              e quanto custa.
+            </p>
+            <BotaoContato grande />
+            <p className="final-local">
+              {perfil.nome}, {perfil.cidade}. Atendo todo o Brasil.
+            </p>
+          </div>
         </section>
       </main>
 

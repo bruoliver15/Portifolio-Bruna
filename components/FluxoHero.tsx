@@ -61,7 +61,7 @@ export function FluxoHero() {
         ))}
       </svg>
       <figcaption>
-        Fluxo real de uma página que fiz: um cadastro, três destinos, zero trabalho manual.
+        Uma automação que eu fiz: o cliente se cadastra e tudo acontece sozinho, sem ninguém digitar nada.
       </figcaption>
     </figure>
   );
